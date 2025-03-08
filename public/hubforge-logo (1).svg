@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 150">
+  <!-- H -->
+  <g transform="translate(0, 0)">
+    <rect x="5" y="5" width="140" height="140" rx="20" ry="20" fill="#6b78b4" />
+    <text x="75" y="105" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="#d9e0f2" text-anchor="middle">H</text>
+  </g>
+  
+  <!-- U -->
+  <g transform="translate(150, 0)">
+    <rect x="5" y="5" width="140" height="140" rx="20" ry="20" fill="#6b78b4" />
+    <text x="75" y="105" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="#d9e0f2" text-anchor="middle">U</text>
+  </g>
+  
+  <!-- B -->
+  <g transform="translate(300, 0)">
+    <rect x="5" y="5" width="140" height="140" rx="20" ry="20" fill="#6b78b4" />
+    <text x="75" y="105" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="#d9e0f2" text-anchor="middle">B</text>
+  </g>
+  
+  <!-- F -->
+  <g transform="translate(450, 0)">
+    <rect x="5" y="5" width="140" height="140" rx="20" ry="20" fill="#6b78b4" />
+    <text x="75" y="105" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="#d9e0f2" text-anchor="middle">F</text>
+  </g>
+  
+  <!-- O -->
+  <g transform="translate(600, 0)">
+    <rect x="5" y="5" width="140" height="140" rx="20" ry="20" fill="#6b78b4" />
+    <text x="75" y="105" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="#d9e0f2" text-anchor="middle">O</text>
+  </g>
+  
+  <!-- R -->
+  <g transform="translate(750, 0)">
+    <rect x="5" y="5" width="140" height="140" rx="20" ry="20" fill="#6b78b4" />
+    <text x="75" y="105" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="#d9e0f2" text-anchor="middle">R</text>
+  </g>
+  
+  <!-- G -->
+  <g transform="translate(900, 0)">
+    <rect x="5" y="5" width="140" height="140" rx="20" ry="20" fill="#6b78b4" />
+    <text x="75" y="105" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="#d9e0f2" text-anchor="middle">G</text>
+  </g>
+  
+  <!-- E -->
+  <g transform="translate(1050, 0)">
+    <rect x="5" y="5" width="140" height="140" rx="20" ry="20" fill="#6b78b4" />
+    <text x="75" y="105" font-family="Arial, sans-serif" font-size="100" font-weight="bold" fill="#d9e0f2" text-anchor="middle">E</text>
+  </g>
+</svg>
