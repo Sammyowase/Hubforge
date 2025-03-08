@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useEffect } from "react";
 import { BarLoader } from "react-spinners";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,6 +19,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import MDEditor from "@uiw/react-md-editor";
 import useFetch from "@/hooks/use-fetch";
 import { createIssue } from "@/actions/issues";
 import { getOrganizationUsers } from "@/actions/organizations";
@@ -36,6 +37,8 @@ export default function IssueCreationDrawer({
   const {
     loading: createIssueLoading,
     fn: createIssueFn,
+    error,
+    data: newIssue,
   } = useFetch(createIssue);
 
   const {
@@ -60,38 +63,27 @@ export default function IssueCreationDrawer({
   });
 
   useEffect(() => {
-    if (isOpen && orgId && !users?.length) {
+    if (isOpen && orgId) {
       fetchUsers(orgId);
     }
-  }, [isOpen, orgId, users?.length]); // Added users?.length to prevent unnecessary fetches
+  }, [isOpen, orgId]);
 
-  const onSubmit = useCallback(
-    async (data) => {
-      try {
-        await createIssueFn(projectId, {
-          ...data,
-          status,
-          sprintId,
-        });
-      } catch (error) {
-        console.error("Error creating issue:", error);
-        alert("Failed to create issue. Please try again.");
-      }
-    },
-    [createIssueFn, projectId, status, sprintId]
-  );
+  const onSubmit = async (data) => {
+    await createIssueFn(projectId, {
+      ...data,
+      status,
+      sprintId,
+    });
+  };
 
   useEffect(() => {
-    if (isOpen) {
+    if (newIssue) {
       reset();
-    }
-  }, [isOpen, reset]);
-
-  useEffect(() => {
-    if (!isOpen && onIssueCreated) {
+      onClose();
       onIssueCreated();
     }
-  }, [isOpen, onIssueCreated]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [newIssue, createIssueLoading]);
 
   return (
     <Drawer open={isOpen} onClose={onClose}>
@@ -101,33 +93,104 @@ export default function IssueCreationDrawer({
         </DrawerHeader>
         {usersLoading && <BarLoader width={"100%"} color="#36d7b7" />}
         <form onSubmit={handleSubmit(onSubmit)} className="p-4 space-y-4">
-          <Input id="title" {...register("title")} placeholder="Title" />
-          {errors.title && <p className="text-red-500">{errors.title.message}</p>}
+          <div>
+            <label htmlFor="title" className="block text-sm font-medium mb-1">
+              Title
+            </label>
+            <Input id="title" {...register("title")} />
+            {errors.title && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.title.message}
+              </p>
+            )}
+          </div>
 
-          <Controller
-            name="assigneeId"
-            control={control}
-            render={({ field }) => (
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select assignee" />
-                </SelectTrigger>
-                <SelectContent>
-                  {users?.length > 0 ? (
-                    users.map((user) => (
+          <div>
+            <label
+              htmlFor="assigneeId"
+              className="block text-sm font-medium mb-1"
+            >
+              Assignee
+            </label>
+            <Controller
+              name="assigneeId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select assignee" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {users?.map((user) => (
                       <SelectItem key={user.id} value={user.id}>
                         {user?.name}
                       </SelectItem>
-                    ))
-                  ) : (
-                    <SelectItem disabled>No users available</SelectItem>
-                  )}
-                </SelectContent>
-              </Select>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
+            {errors.assigneeId && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.assigneeId.message}
+              </p>
             )}
-          />
+          </div>
 
-          <Button type="submit" disabled={createIssueLoading}>
+          <div>
+            <label
+              htmlFor="description"
+              className="block text-sm font-medium mb-1"
+            >
+              Description
+            </label>
+            <Controller
+              name="description"
+              control={control}
+              render={({ field }) => (
+                <MDEditor value={field.value} onChange={field.onChange} />
+              )}
+            />
+          </div>
+
+          <div>
+            <label
+              htmlFor="priority"
+              className="block text-sm font-medium mb-1"
+            >
+              Priority
+            </label>
+            <Controller
+              name="priority"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select priority" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="LOW">Low</SelectItem>
+                    <SelectItem value="MEDIUM">Medium</SelectItem>
+                    <SelectItem value="HIGH">High</SelectItem>
+                    <SelectItem value="URGENT">Urgent</SelectItem>
+                  </SelectContent>
+                </Select>
+              )}
+            />
+          </div>
+
+          {error && <p className="text-red-500 mt-2">{error.message}</p>}
+          <Button
+            type="submit"
+            disabled={createIssueLoading}
+            className="w-full"
+          >
             {createIssueLoading ? "Creating..." : "Create Issue"}
           </Button>
         </form>

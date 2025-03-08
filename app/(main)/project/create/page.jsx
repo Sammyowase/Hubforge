@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
@@ -29,15 +29,10 @@ export default function CreateProjectPage() {
   });
 
   useEffect(() => {
-    if (
-      isOrgLoaded &&
-      isUserLoaded &&
-      membership &&
-      isAdmin !== (membership.role === "org:admin")
-    ) {
+    if (isOrgLoaded && isUserLoaded && membership) {
       setIsAdmin(membership.role === "org:admin");
     }
-  }, [isOrgLoaded, isUserLoaded, membership, isAdmin]);
+  }, [isOrgLoaded, isUserLoaded, membership]);
 
   const {
     loading,
@@ -46,21 +41,18 @@ export default function CreateProjectPage() {
     fn: createProjectFn,
   } = useFetch(createProject);
 
-  const onSubmit = useCallback(
-    async (data) => {
-      if (!isAdmin) {
-        alert("Only organization admins can create projects");
-        return;
-      }
+  const onSubmit = async (data) => {
+    if (!isAdmin) {
+      alert("Only organization admins can create projects");
+      return;
+    }
 
-      await createProjectFn(data);
-    },
-    [isAdmin, createProjectFn]
-  );
+    createProjectFn(data);
+  };
 
   useEffect(() => {
     if (project) router.push(`/project/${project.id}`);
-  }, [project, router]);
+  }, [loading]);
 
   if (!isOrgLoaded || !isUserLoaded) {
     return null;

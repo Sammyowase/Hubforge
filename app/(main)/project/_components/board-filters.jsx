@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -20,31 +20,22 @@ export default function BoardFilters({ issues, onFilterChange }) {
   const [selectedAssignees, setSelectedAssignees] = useState([]);
   const [selectedPriority, setSelectedPriority] = useState("");
 
-  // Memoize the list of assignees to prevent unnecessary re-renders
-  const assignees = useMemo(() => {
-    return issues
-      .map((issue) => issue.assignee)
-      .filter((assignee) => assignee && assignee.id) // Filter out undefined/null assignees
-      .filter(
-        (item, index, self) => index === self.findIndex((t) => t.id === item.id)
-      );
-  }, [issues]);
+  const assignees = issues
+    .map((issue) => issue.assignee)
+    .filter(
+      (item, index, self) => index === self.findIndex((t) => t.id === item.id)
+    );
 
   useEffect(() => {
-    if (typeof onFilterChange !== "function") return;
-
     const filteredIssues = issues.filter(
       (issue) =>
         issue.title.toLowerCase().includes(searchTerm.toLowerCase()) &&
         (selectedAssignees.length === 0 ||
-          (issue.assignee && selectedAssignees.includes(issue.assignee.id))) &&
+          selectedAssignees.includes(issue.assignee?.id)) &&
         (selectedPriority === "" || issue.priority === selectedPriority)
     );
-
-    if (filteredIssues.length !== issues.length || searchTerm || selectedAssignees.length || selectedPriority) {
-      onFilterChange(filteredIssues);
-    }
-  }, [searchTerm, selectedAssignees, selectedPriority, issues, onFilterChange]);
+    onFilterChange(filteredIssues);
+  }, [searchTerm, selectedAssignees, selectedPriority, issues]);
 
   const toggleAssignee = (assigneeId) => {
     setSelectedAssignees((prev) =>
@@ -77,31 +68,27 @@ export default function BoardFilters({ issues, onFilterChange }) {
 
         <div className="flex-shrink-0">
           <div className="flex gap-2 flex-wrap">
-            {assignees.length > 0 ? (
-              assignees.map((assignee, i) => {
-                const selected = selectedAssignees.includes(assignee.id);
+            {assignees.map((assignee, i) => {
+              const selected = selectedAssignees.includes(assignee.id);
 
-                return (
-                  <div
-                    key={assignee.id}
-                    className={`rounded-full ring ${
-                      selected ? "ring-blue-600" : "ring-black"
-                    } ${i > 0 ? "-ml-6" : ""}`}
-                    style={{ zIndex: i }}
-                    onClick={() => toggleAssignee(assignee.id)}
-                  >
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage src={assignee.imageUrl} alt={assignee.name} />
-                      <AvatarFallback>
-                        {assignee.name ? assignee.name[0] : "?"}
-                      </AvatarFallback>
-                    </Avatar>
-                  </div>
-                );
-              })
-            ) : (
-              <span className="text-gray-500 text-sm">No Assignees Available</span>
-            )}
+              return (
+                <div
+                  key={assignee.id}
+                  className={`rounded-full ring ${
+                    selected ? "ring-blue-600" : "ring-black"
+                  } ${i > 0 ? "-ml-6" : ""}`}
+                  style={{
+                    zIndex: i,
+                  }}
+                  onClick={() => toggleAssignee(assignee.id)}
+                >
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={assignee.imageUrl} />
+                    <AvatarFallback>{assignee.name[0]}</AvatarFallback>
+                  </Avatar>
+                </div>
+              );
+            })}
           </div>
         </div>
 
