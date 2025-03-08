@@ -76,19 +76,11 @@ export default function Home() {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="container mx-auto py-20 text-center">
+      <section className="container mx-auto py-20 text-center px-4 sm:px-6 lg:px-8">
         <h1 className="text-6xl sm:text-7xl lg:text-8xl font-extrabold gradient-title pb-6 flex flex-col">
           Streamline Your Workflow <br />
           <span className="flex mx-auto gap-3 sm:gap-4 items-center">
-            with
-            <Image
-              src={"/hubforge-logo (1).svg"}
-              alt="Zscrum Logo"
-              width={400}
-              height={80}
-              className="h-14 sm:h-24 w-auto object-contain"
-            />
-          </span>
+            with Hubforge</span>
         </h1>
         <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto">
           Empower your team with our intuitive project management solution.
@@ -110,7 +102,7 @@ export default function Home() {
       <section id="features" className="bg-gray-900 py-20 px-5">
         <div className="container mx-auto">
           <h3 className="text-3xl font-bold mb-12 text-center">Key Features</h3>
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {features.map((feature, index) => (
               <Card key={index} className="bg-gray-800">
                 <CardContent className="pt-6">
@@ -128,7 +120,7 @@ export default function Home() {
 
       {/* Companies Carousel */}
       <section className="py-20">
-        <div className="container mx-auto">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <h3 className="text-3xl font-bold mb-12 text-center">
             Trusted by Industry Leaders
           </h3>
